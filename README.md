@@ -7,7 +7,7 @@ Foundations > Low-level programming & Algorithm > Data structures and Algorithms
 Alexandre Gautier
 
 ### Assignment dates
-07-20-2020 to 07-25-2020
+03-06-2024 to 07-06-2024
 
 ### Description
 Introduction to the characteristics, types, and use of binary trees.
@@ -534,4 +534,4 @@ File(s): [`135-O`](./135-O)
 ---
 
 ## Student
-* **Samuel Pomeroy** - [allelomorph](github.com/allelomorph)
+**Christopher Chilengwe** - [Christopher-Chilengwe](github.com/Christopher-Chilengwe)
