@@ -1,70 +1,64 @@
-/* 20. Level-order traversal  */
 #include "binary_trees.h"
 
 /**
- * max_size_t - finds larger of two size_t values
- * @a: first value to compare
- * @b: second value to compare
- * Return: larger size_t value, or value of both if equal
- */
-size_t max_size_t(size_t a, size_t b)
-{
-	return ((a > b) ? a : b);
-}
-
-/**
- * binary_tree_height - measures the height of a binary tree
- * @tree: root node from which to measure, starting at 0
- * Return: levels from root, or 0 if `tree` is NULL
+ * binary_tree_height - Measures the height of a binary tree
+ * @tree: Pointer to the root node of the tree to measure the height
+ *
+ * Return: Height of tree, 0 if NULL
  */
 size_t binary_tree_height(const binary_tree_t *tree)
 {
+	size_t height_l;
+	size_t height_r;
+
 	if (!tree)
 		return (0);
 
-	if (!tree->left && !tree->right)
-		return (0);
-
-	return (1 + max_size_t(binary_tree_height(tree->left),
-			       binary_tree_height(tree->right)));
+	height_l = tree->left ? 1 + binary_tree_height(tree->left) : 0;
+	height_r = tree->right ? 1 + binary_tree_height(tree->right) : 0;
+	return (height_l > height_r ? height_l : height_r);
 }
 
 /**
- * operate_on_level - recurses to a given level (depth) of a binary tree to
- * apply `func` to each node's value
- * @tree: root of tree or subtree
- * @lvl: depth in tree to recurse to, starting at 0 for `root`
- * @func: pointer to function to apply to all nodes at level `lvl`
+ * visit_level - Visit all nodes of a given level in a binary tree
+ * @tree: Pointer to root of tree
+ * @level: Tree level
+ * @func: Visiting function
+ *
+ * Return: N/A
  */
-void operate_on_level(const binary_tree_t *tree, size_t lvl, void (*func)(int))
+void visit_level(const binary_tree_t *tree, int level, void (*func)(int))
 {
-	if (!tree || !func)
+	if (!tree)
 		return;
-
-	if (lvl == 0)
+	if (level == 1)
 		func(tree->n);
 	else
 	{
-		operate_on_level(tree->left, lvl - 1, func);
-		operate_on_level(tree->right, lvl - 1, func);
+		visit_level(tree->left, level - 1, func);
+		visit_level(tree->right, level - 1, func);
 	}
 }
 
 /**
- * binary_tree_levelorder - applies function to each node in a binary tree
- * using level-order traversal, making iterative calls to a helper
- * @tree: root of tree or subtree
- * @func: pointer to function to be applied
+ * binary_tree_levelorder - Traverse binary tree by level
+ * @tree: Pointer to root of binary tree
+ * @func: Visiting function
+ *
+ * Return: N/A
  */
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
-	size_t tree_h, i;
+	int height;
+	int i;
 
-	if (!tree || !func)
-		return;
+	if (tree && func)
+	{
+		height = binary_tree_height(tree) + 2;
 
-	tree_h = binary_tree_height(tree);
-
-	for (i = 0; i <= tree_h; i++)
-		operate_on_level(tree, i, func);
+		for (i = 0; i < height; i++)
+		{
+			visit_level(tree, i, func);
+		}
+	}
 }

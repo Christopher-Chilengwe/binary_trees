@@ -1,56 +1,39 @@
 #include "binary_trees.h"
 
-
-#ifndef MAX_INT
-#define MAX_INT
-
 /**
- * max_int - finds larger of two int values
- * @a: first value to compare
- * @b: second value to compare
- * Return: larger int value, or value of both if equal
+ * binary_tree_height - Measures the height of a binary tree
+ * @tree: Pointer to the root node of the tree to measure the height
+ *
+ * Return: Height of tree, -1 if NULL
  */
-inline int max_int(int a, int b)
+size_t binary_tree_height(const binary_tree_t *tree)
 {
-	return ((a > b) ? a : b);
-}
+	size_t height_l;
+	size_t height_r;
 
-#endif
-
-
-/**
- * binary_tree_balance_height - measures the height of a binary tree
- * @tree: root node from which to measure, starting at 1
- * Return: count of root and levels below, or 0 if `tree` is NULL
- */
-int binary_tree_balance_height(const binary_tree_t *tree)
-{
 	if (!tree)
 		return (0);
 
-	if (!tree->left && !tree->right)
-		return (1);
-
-	return (1 + max_int(binary_tree_balance_height(tree->left),
-			    binary_tree_balance_height(tree->right)));
+	height_l = tree->left ? 1 + binary_tree_height(tree->left) : 0;
+	height_r = tree->right ? 1 + binary_tree_height(tree->right) : 0;
+	return (height_l > height_r ? height_l : height_r);
 }
 
-
 /**
- * binary_tree_balance - measures the balance factor of a binary tree
- * @tree: root node from which to measure
- * Return: height of `tree` left subtree minus height of right subtree,
- * or 0 if `tree` is NULL
+ * binary_tree_balance - Get balance factor of binary tree
+ * @tree: Pointer to root of binary tree
+ *
+ * Return: Balance factor of binary tree
  */
 int binary_tree_balance(const binary_tree_t *tree)
 {
-	int left_h, right_h;
+	int height_l;
+	int height_r;
 
 	if (!tree)
 		return (0);
 
-	left_h = binary_tree_balance_height(tree->left);
-	right_h = binary_tree_balance_height(tree->right);
-
-	return (left_h - right_h);
+	height_l = tree->left ? 1 + binary_tree_height(tree->left) : 0;
+	height_r = tree->right ? 1 + binary_tree_height(tree->right) : 0;
+	return (height_l - height_r);
 }

@@ -1,31 +1,66 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_perfect - checks if a binary tree is perfect, meaning all
- * nodes except for leaves have two children
- * @tree: root node below which to check
- * Return: 1 if `tree` and all nodes below it each have 2 children, 0 if not or
- * if `tree` is NULL
+ * _pow_recursion - Calculate x raised to the power of y
+ * @x: Base
+ * @y: Exponent
+ *
+ * Return: x raised to power of y
  */
-int binary_tree_is_perfect(const binary_tree_t *tree)
+
+int _pow_recursion(int x, int y)
 {
-	/* root is null */
+	if (y < 0)
+		return (-1);
+	if (y == 0)
+		return (1);
+	return (x * _pow_recursion(x, y - 1));
+}
+
+/**
+ * binary_tree_height - Measures the height of a binary tree
+ * @tree: Pointer to the root node of the tree to measure the height
+ *
+ * Return: Height of tree, 0 if NULL
+ */
+size_t binary_tree_height(const binary_tree_t *tree)
+{
+	size_t height_l;
+	size_t height_r;
+
 	if (!tree)
 		return (0);
 
-	if (tree->right && tree->left)
-	{
-		if ((!tree->left->left && !tree->left->right) &&
-		    (!tree->right->left && !tree->right->right))
-			return (1);
+	height_l = tree->left ? 1 + binary_tree_height(tree->left) : 0;
+	height_r = tree->right ? 1 + binary_tree_height(tree->right) : 0;
+	return (height_l > height_r ? height_l : height_r);
+}
 
-		return (binary_tree_is_perfect(tree->left) &&
-			binary_tree_is_perfect(tree->right));
-	}
-	else if (!(tree->parent))
-		/* root with no branches */
-		return (1);
+/**
+ * binary_tree_size - Measures the size of a binary tree
+ * @tree: Pointer to root node of tree to measure size
+ *
+ * Return: Size of binary tree, 0 if tree is NULL
+ */
+size_t binary_tree_size(const binary_tree_t *tree)
+{
+	if (!tree)
+		return (0);
+	return (binary_tree_size(tree->left) + binary_tree_size(tree->right) + 1);
+}
 
-	/* leaf reached */
-	return (0);
+/**
+ * binary_tree_is_perfect - Determine if binary tree is perfect
+ * @tree: Pointer to root of tree
+ *
+ * Return: 1 if tree is perfect, 0 otherwise
+ */
+int binary_tree_is_perfect(const binary_tree_t *tree)
+{
+	int nodes, target, height;
+
+	height = binary_tree_height(tree) + 1;
+	nodes = binary_tree_size(tree);
+	target = _pow_recursion(2, height);
+	return (target - 1 == nodes);
 }

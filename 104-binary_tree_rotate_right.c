@@ -1,40 +1,25 @@
-/* 22. Rotate right */
 #include "binary_trees.h"
 
 /**
- * binary_tree_rotate_right - R child of root becomes new root, tree rotated
- * so it retains BST ordering of values (in-order traversal of leaves is same)
- * @tree: tree to right rotate
- * Return: pointer to new root node, or NULL if `root` is NULL
+ * binary_tree_rotate_right - Rotate binary tree to the right
+ * @tree: Pointer to root of tree
+ *
+ * Return: Pointer to new root
  */
 binary_tree_t *binary_tree_rotate_right(binary_tree_t *tree)
 {
-	binary_tree_t *pivot;
+	binary_tree_t *tmp = NULL;
 
-	if (!tree)
-		return (NULL);
-
-	/* pivot will become new root */
-	pivot = tree->left;
-
-	/* migrate children to keep BST order */
-	tree->left = pivot->right;
-	if (pivot->right)
-		pivot->right->parent = tree;
-
-	/* handle upstream connections if `tree` is a subtree */
-	pivot->parent = tree->parent;
-	if (tree->parent)
+	if (tree && tree->left)
 	{
-		if (tree == tree->parent->right)
-			tree->parent->right = pivot;
-		else
-			tree->parent->left = pivot;
+		tmp = tree->left->right;
+		tree->left->right = tree;
+		tree->left->parent = NULL;
+		tree->parent = tree->left;
+		tree->left = tmp;
+		if (tmp)
+			tmp->parent = tree;
+		tree = tree->parent;
 	}
-
-	/* finally rotate pivot into root postion */
-	pivot->right = tree;
-	tree->parent = pivot;
-
-	return (pivot);
+	return (tree);
 }

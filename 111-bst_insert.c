@@ -1,67 +1,101 @@
-/* 25. BST - Insert */
 #include "binary_trees.h"
 
-
 /**
- * bst_insert_recursion - recursively traverses a Binary Search Tree to insert
- * a new value
+ * lt - Checks left pointers to determine insert position
+ * @new: Double pointer to new
+ * @current: Double pointer to pointer to tree
+ * @value: to insert
  *
- * @tree: binary tree node
- * @value: integer to insert in new node
- * Return: pointer to new node, or NULL on failure or value found already
- * found in tree
+ * Return: 1 on success, 0 on failure, 2 if duplicate found, 3 on malloc fail
  */
-bst_t *bst_insert_recursion(bst_t *tree, int value)
+int lt(bst_t **new, bst_t **current, int value)
 {
-	bst_t *new = NULL;
+	if ((*current)->left && value == (*current)->left->n)
+		return (2);
 
-	if (tree->n > value)
+	while (*current && value < (*current)->n)
 	{
-		if (tree->left == NULL)
+		if (!(*current)->left)
 		{
-			new = binary_tree_node(tree, value);
-			tree->left = new;
-			return (new);
+			(*new) = binary_tree_node(*current, value);
+			if (!*new)
+				return (3);
+			(*current)->left = *new;
+			return (1);
 		}
-
-		return (bst_insert_recursion(tree->left, value));
+		*current = (*current)->left;
 	}
-
-	if (tree->n < value)
-	{
-		if (tree->right == NULL)
-		{
-			new = binary_tree_node(tree, value);
-			tree->right = new;
-			return (new);
-		}
-
-		return (bst_insert_recursion(tree->right, value));
-	}
-
-	/* (tree->n == value) */
-	return (NULL);
+	return (0);
 }
 
+/**
+ * gt - Checks left pointers to determine insert position
+ * @new: Double pointer to new
+ * @current: Double pointer to pointer to tree
+ * @value: to insert
+ *
+ * Return: 1 on success, 0 on failure, 2 if duplicate found, 3 on malloc fail
+ */
+int gt(bst_t **new, bst_t **current, int value)
+{
+	if ((*current)->right && value == (*current)->right->n)
+		return (2);
+
+	while (*current && value > (*current)->n)
+	{
+		if (!(*current)->right)
+		{
+			*new = binary_tree_node(*current, value);
+			if (!*new)
+				return (3);
+			(*current)->right = *new;
+			return (1);
+		}
+		*current = (*current)->right;
+	}
+	return (0);
+}
 
 /**
- * bst_insert - inserts a value in a Binary Search Tree
+ * bst_insert - Inserts a value in a BST
+ * @tree: Double pointer to root node of BST to insert value
+ * @value: Value to store the node being inserted
  *
- * @tree: binary tree node passed by reference
- * @value: integer to insert in new node
- * Return: pointer to new node, or NULL on failure or value found already
- * found in tree
+ * Return: Pointer to created node, NULL on failure
+ * If tree address is NULL, created node becomes root
+ * If value already present then ignore
  */
 bst_t *bst_insert(bst_t **tree, int value)
 {
-	bst_t *new = NULL;
+	bst_t *new, *current;
+	int ret;
 
-	if (!tree || !(*tree))
+	if (!tree)
+		return (NULL);
+	current = NULL;
+	if (!*tree)
 	{
-		new = binary_tree_node(NULL, value);
+		new = binary_tree_node(*tree, value);
+		if (!new)
+			return (NULL);
 		*tree = new;
-		return (new);
 	}
-
-	return (bst_insert_recursion(*tree, value));
+	else
+	{
+		current = *tree;
+		while (1)
+		{
+			ret = lt(&new, &current, value);
+			if (ret == 1)
+				break;
+			else if (ret == 2 || ret == 3)
+				return (NULL);
+			ret = gt(&new, &current, value);
+			if (ret == 1)
+				break;
+			else if (ret == 2 || ret == 3)
+				return (NULL);
+		}
+	}
+	return (new);
 }

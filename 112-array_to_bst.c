@@ -1,35 +1,30 @@
-/* 26. BST - Array to BST  */
 #include "binary_trees.h"
-
-
 /**
- * array_to_bst - builds a Binary Search Tree from an array
- *
- * @array: array of integers, may be unsorted and have repeating values
- * @size: amount of array members
- * Return: pointer to head of new BST constructed from array
+ * array_to_bst - turns an array to a BST tree
+ * @array: array to turns to BST tree
+ * @size: size of array
+ * Return: BST tree from array
  */
 bst_t *array_to_bst(int *array, size_t size)
 {
-	bst_t *tree = NULL;
-	size_t i, j;
+	size_t i = 0;
+	bst_t *root;
 
-	if (array == NULL)
-		return (NULL);
-
-	for (i = 0; i < size; i++)
+	root = NULL;
+	if (size == 0)
 	{
-		/* check if NULL return is for repeat value */
-		if (bst_insert(&tree, array[i]) == NULL)
+		return (NULL);
+	}
+	for (; i < size; i++)
+	{
+		if (i == 0)
 		{
-			for (j = 0; j < size && array[j] != array[i]; j++)
-			{}
-
-			/* not a repeating value, bst_insert failure */
-			if (j == i)
-				return (NULL);
+			bst_insert(&root, array[i]);
+		}
+		else
+		{
+			bst_insert(&root, array[i]);
 		}
 	}
-
-	return (tree);
+	return (root);
 }
