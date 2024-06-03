@@ -4,9 +4,9 @@ Group project
 Algorithm
 Data structure
  Weight: 5
- Project to be done in teams of 2 people (your team: Lilian Peter, Dibuseng Motaung)
- Project will start Apr 8, 2024 6:00 AM, must end by Apr 12, 2024 6:00 AM
- Checker was released at Apr 9, 2024 6:00 AM
+ Project to be done in teams of 2 people (your team: Christopher Chilengwe)
+ Project will start June 3, 2024 6:00 AM, must end by June 7, 2024 6:00 AM
+ Checker was released at June 3, 2024 6:00 AM
  An auto review will be launched at the deadline
 Resources
 Read or watch:
